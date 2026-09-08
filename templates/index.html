@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>HelpDesk TI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+```
+<div class="container">
+
+    <h1>HelpDesk TI</h1>
+    <p>Gestão de chamados de suporte técnico</p>
+
+    <div class="dashboard">
+
+        <div class="card">
+            <h3>Total</h3>
+            <p>{{ total }}</p>
+        </div>
+
+        <div class="card">
+            <h3>Abertos</h3>
+            <p>{{ abertos }}</p>
+        </div>
+
+        <div class="card">
+            <h3>Resolvidos</h3>
+            <p>{{ resolvidos }}</p>
+        </div>
+
+        <div class="card">
+            <h3>Alta prioridade</h3>
+            <p>{{ alta }}</p>
+        </div>
+
+</div>
+    <h2>Abrir chamado</h2>
+
+    <form method="POST" action="/criar">
+
+        <input
+            type="text"
+            name="titulo"
+            placeholder="Título do chamado"
+            required
+        >
+
+        <textarea
+            name="descricao"
+            placeholder="Descreva o chamado"
+            required
+        ></textarea>
+
+        <select name="prioridade">
+            <option value="Baixa">Baixa</option>
+            <option value="Média">Média</option>
+            <option value="Alta">Alta</option>
+        </select>
+
+        <button type="submit">Criar chamado</button>
+
+    </form>
+
+    <hr>
+
+    <h2>Chamados registrados</h2>
+
+    {% if chamados %}
+
+        {% for chamado in chamados %}
+
+            <div class="chamado">
+
+                <h3>
+                    #{{ chamado["id"] }} - {{ chamado["titulo"] }}
+                </h3>
+
+            <p>
+                    {{ chamado["descricao"] }}
+            </p>
+
+            <p>
+                    <strong>Criado em:</strong>
+                    {{ chamado["data_criacao"] }}
+            </p>
+            
+            <p>
+                    <strong>Prioridade:</strong>
+
+                    <span class="prioridade {{ chamado['prioridade']|lower }}">
+                        {{ chamado["prioridade"] }}
+                </span>
+            </p>
+
+<p>
+    <strong>Status:</strong>
+
+    <span class="status {{ chamado['status']|lower }}">
+        {{ chamado["status"] }}
+    </span>
+</p>
+                
+                {% if chamado["status"] == "Aberto" %}
+                    <a href="/resolver/{{ chamado['id'] }}">
+                        <button type="button">Resolver chamado</button>
+                    </a>
+                {% endif %}
+                    
+                <a href="/chamado/{{ chamado['id'] }}">
+                    <button type="button">Ver detalhes</button>
+                </a>
+
+                    <a href="/excluir/{{ chamado['id'] }}"
+                        onclick="return confirm('Tem certeza que deseja excluir este chamado?');">
+                            <button type="button">Excluir chamado</button>
+                    </a>
+            </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <p>Nenhum chamado registrado.</p>
+
+    {% endif %}
+
+</div>
+```
+
+</body>
+</html>

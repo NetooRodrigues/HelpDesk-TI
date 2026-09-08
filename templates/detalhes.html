@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do chamado</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Detalhes do chamado</h1>
+    
+    <div class="detalhes">
+
+        <h2>#{{ chamado["id"] }} - {{ chamado["titulo"] }}</h2>
+    
+        <p>
+            <strong>Descrição:</strong><br>
+            {{ chamado["descricao"] }}
+        </p>
+
+        <p>
+            <strong>Prioridade:</strong>
+            {{ chamado["prioridade"] }}
+        </p>
+
+        <p>
+            <strong>Status:</strong>
+            {{ chamado["status"] }}
+        </p>
+
+        <p>
+            <strong>Criado em:</strong>
+            {{ chamado["data_criacao"] }}
+        </p>
+
+        <br>
+
+    </div>
+
+     <div class="botoes">
+
+    <a href="/">
+        <button type="button">Voltar</button>
+    </a>
+
+    <a href="/editar/{{ chamado['id'] }}">
+        <button type="button">Editar chamado</button>
+    </a>
+
+    {% if chamado["status"] == "Aberto" %}
+        <a href="/resolver/{{ chamado['id'] }}">
+            <button type="button">Resolver chamado</button>
+        
+        </a>
+    {% endif %}
+
+    <a href="/excluir/{{ chamado['id'] }}"
+       onclick="return confirm('Tem certeza que deseja excluir este chamado?');">
+        <button type="button">Excluir chamado</button>
+    </a>
+
+</div>
+
+</body>
+
+</html>

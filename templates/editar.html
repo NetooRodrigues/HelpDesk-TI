@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar chamado</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Editar chamado</h1>
+
+        <p>Altere as informações do chamado abaixo.</p>
+
+        <form method="POST">
+
+            <input
+                type="text"
+                name="titulo"
+                value="{{ chamado['titulo'] }}"
+                required
+            >
+
+            <textarea
+                name="descricao"
+                required
+            >{{ chamado["descricao"] }}</textarea>
+
+            <select name="prioridade">
+
+                <option value="Baixa"
+                    {% if chamado["prioridade"] == "Baixa" %}selected{% endif %}>
+                    Baixa
+                </option>
+
+                <option value="Média"
+                    {% if chamado["prioridade"] == "Média" %}selected{% endif %}>
+                    Média
+                </option>
+
+                <option value="Alta"
+                    {% if chamado["prioridade"] == "Alta" %}selected{% endif %}>
+                    Alta
+                </option>
+
+            </select>
+
+            <button type="submit">Salvar alterações</button>
+
+        </form>
+
+        <div class="botoes">
+
+            <a href="/chamado/{{ chamado['id'] }}">
+                <button type="button">Cancelar</button>
+            </a>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>
