@@ -4,6 +4,7 @@ from datetime import datetime
 
 app = Flask(__name__)
 
+
 def criar_banco():
     conexao = sqlite3.connect("helpdesk.db")
 
@@ -20,6 +21,11 @@ def criar_banco():
 
     conexao.commit()
     conexao.close()
+
+
+# Cria o banco e a tabela quando a aplicação é carregada.
+# Isso é necessário para funcionar também no Render com Gunicorn.
+criar_banco()
 
 
 @app.route("/")
@@ -68,19 +74,33 @@ def criar():
     titulo = request.form["titulo"]
     descricao = request.form["descricao"]
     prioridade = request.form["prioridade"]
+
     data_criacao = datetime.now().strftime("%d/%m/%Y %H:%M")
+
     conexao = sqlite3.connect("helpdesk.db")
 
-
     conexao.execute("""
-        INSERT INTO chamados (titulo, descricao, prioridade, status, data_criacao)
+        INSERT INTO chamados (
+            titulo,
+            descricao,
+            prioridade,
+            status,
+            data_criacao
+        )
         VALUES (?, ?, ?, ?, ?)
-    """, (titulo, descricao, prioridade, "Aberto", data_criacao))
+    """, (
+        titulo,
+        descricao,
+        prioridade,
+        "Aberto",
+        data_criacao
+    ))
 
     conexao.commit()
     conexao.close()
 
     return redirect("/")
+
 
 @app.route("/chamado/<int:id>")
 def detalhes(id):
@@ -94,7 +114,11 @@ def detalhes(id):
 
     conexao.close()
 
-    return render_template("detalhes.html", chamado=chamado)
+    return render_template(
+        "detalhes.html",
+        chamado=chamado
+    )
+
 
 @app.route("/editar/<int:id>", methods=["GET", "POST"])
 def editar(id):
@@ -102,15 +126,23 @@ def editar(id):
     conexao.row_factory = sqlite3.Row
 
     if request.method == "POST":
+
         titulo = request.form["titulo"]
         descricao = request.form["descricao"]
         prioridade = request.form["prioridade"]
 
         conexao.execute("""
             UPDATE chamados
-            SET titulo = ?, descricao = ?, prioridade = ?
+            SET titulo = ?,
+                descricao = ?,
+                prioridade = ?
             WHERE id = ?
-        """, (titulo, descricao, prioridade, id))
+        """, (
+            titulo,
+            descricao,
+            prioridade,
+            id
+        ))
 
         conexao.commit()
         conexao.close()
@@ -124,7 +156,11 @@ def editar(id):
 
     conexao.close()
 
-    return render_template("editar.html", chamado=chamado)
+    return render_template(
+        "editar.html",
+        chamado=chamado
+    )
+
 
 @app.route("/resolver/<int:id>")
 def resolver(id):
@@ -134,12 +170,16 @@ def resolver(id):
         UPDATE chamados
         SET status = ?
         WHERE id = ?
-    """, ("Resolvido", id))
+    """, (
+        "Resolvido",
+        id
+    ))
 
     conexao.commit()
     conexao.close()
 
     return redirect("/")
+
 
 @app.route("/excluir/<int:id>")
 def excluir(id):
@@ -155,6 +195,6 @@ def excluir(id):
 
     return redirect("/")
 
+
 if __name__ == "__main__":
-    criar_banco()
     app.run(debug=True)
