@@ -24,6 +24,8 @@ Sistema web de gerenciamento de chamados de suporte técnico desenvolvido para p
 - Dashboard com indicadores
 - Layout responsivo
 
+Projeto online: https://helpdesk-ti-5btu.onrender.com
+
 ## Estrutura do projeto
 
 ```text
